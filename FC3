@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Match English Words</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 50px;
+        }
+        .match-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        .word-box, .translation-box {
+            width: 200px;
+            padding: 10px;
+            background-color: lightgray;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .word-box:hover, .translation-box:hover {
+            background-color: yellow;
+        }
+        .selected {
+            background-color: yellow !important;
+        }
+        .correct {
+            background-color: lightgreen !important;
+        }
+        .incorrect {
+            background-color: lightcoral !important;
+        }
+    </style>
+</head>
+<body>
+    <h2>Match English Words with their Vietnamese Meanings</h2>
+    <p>Click on a word and then click on its correct translation.</p>
+    
+    <div class="match-container">
+        <div>
+            <h3>English Words</h3>
+            <div id="words"></div>
+        </div>
+        <div>
+            <h3>Vietnamese Meanings</h3>
+            <div id="translations"></div>
+        </div>
+    </div>
+    
+    <script>
+        const words = [
+            { english: "handicraft", vietnamese: "sản phẩm thủ công" },
+            { english: "cuisine", vietnamese: "ẩm thực" },
+            { english: "specialty", vietnamese: "món đặc sản" },
+            { english: "wildlife", vietnamese: "động vật hoang dã" },
+            { english: "adventure", vietnamese: "phiêu lưu" },
+            { english: "preference", vietnamese: "sự ưa thích" },
+            { english: "landmark", vietnamese: "kiến trúc nổi tiếng" },
+            { english: "concerned about", vietnamese: "quan tâm đến" },
+            { english: "accommodation", vietnamese: "nơi lưu trú" },
+            { english: "reservation", vietnamese: "đặt phòng trước" },
+            { english: "budget", vietnamese: "ngân sách" },
+            { english: "receptionist", vietnamese: "nhân viên lễ tân" },
+            { english: "guest", vietnamese: "vị khách" },
+            { english: "reminder", vietnamese: "sự nhắc nhở" },
+            { english: "payment", vietnamese: "thanh toán" },
+            { english: "extreme sports", vietnamese: "thể thao mạo hiểm" },
+            { english: "bungee jumping", vietnamese: "nhảy bungee" },
+            { english: "skydiving", vietnamese: "nhảy dù" },
+            { english: "paragliding", vietnamese: "dù lượn" },
+            { english: "snowboarding", vietnamese: "lướt ván tuyết" },
+            { english: "white-water rafting", vietnamese: "đi thuyền vượt thác" },
+            { english: "recommendation", vietnamese: "khuyến nghị" },
+            { english: "safety", vietnamese: "sự an toàn" }
+        ];
+        
+        let selectedWord = null;
+
+        function shuffle(array) {
+            return array.sort(() => Math.random() - 0.5);
+        }
+
+        function createWordList() {
+            let wordContainer = document.getElementById("words");
+            let translationContainer = document.getElementById("translations");
+            
+            let shuffledWords = shuffle([...words]);
+            let shuffledTranslations = shuffle([...words]);
+            
+            shuffledWords.forEach(item => {
+                let wordBox = document.createElement("div");
+                wordBox.classList.add("word-box");
+                wordBox.textContent = item.english;
+                wordBox.onclick = () => selectWord(wordBox);
+                wordContainer.appendChild(wordBox);
+            });
+            
+            shuffledTranslations.forEach(item => {
+                let translationBox = document.createElement("div");
+                translationBox.classList.add("translation-box");
+                translationBox.textContent = item.vietnamese;
+                translationBox.onclick = () => selectTranslation(translationBox, item.vietnamese);
+                translationContainer.appendChild(translationBox);
+            });
+        }
+
+        function selectWord(element) {
+            if (selectedWord) {
+                selectedWord.classList.remove("selected");
+            }
+            selectedWord = element;
+            selectedWord.classList.add("selected");
+        }
+
+        function selectTranslation(element, translation) {
+            if (!selectedWord) return;
+            
+            let match = words.find(item => item.english === selectedWord.textContent && item.vietnamese === translation);
+            
+            if (match) {
+                selectedWord.classList.add("correct");
+                element.classList.add("correct");
+            } else {
+                selectedWord.classList.add("incorrect");
+                element.classList.add("incorrect");
+            }
+            selectedWord = null;
+        }
+
+        createWordList();
+    </script>
+</body>
+</html>
